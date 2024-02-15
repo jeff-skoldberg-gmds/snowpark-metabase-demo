@@ -2,7 +2,7 @@
 
 ## Requirements
 1. Docker. 
-2. Snowflake account: an Enterprise Edition within the region of either AWS - Europe (London) or  AWS - Asia Pacific (Mumbai). [Region info](https://docs.snowflake.com/en/developer-guide/snowpark-container-services/overview#label-snowpark-containers-overview-available-regions).
+2. Snowflake account: an Enterprise Edition within a supported region: [Region info](https://docs.snowflake.com/en/developer-guide/snowpark-container-services/overview#label-snowpark-containers-overview-available-regions).
 3. Set default role to another that is not ACCOUNTADMIN or SYSADMIN.
 
 ## Snowflake Setup
