@@ -1,0 +1,53 @@
+USE ROLE ACCOUNTADMIN;
+
+CREATE ROLE test_role;
+
+CREATE DATABASE IF NOT EXISTS tutorial_db;
+GRANT OWNERSHIP ON DATABASE tutorial_db TO ROLE test_role;
+
+CREATE OR REPLACE WAREHOUSE tutorial_warehouse WITH
+  WAREHOUSE_SIZE='X-SMALL'
+  WAREHOUSE_TYPE = 'STANDARD'
+  AUTO_SUSPEND = 60
+  AUTO_RESUME = TRUE
+  MIN_CLUSTER_COUNT = 1
+  MAX_CLUSTER_COUNT = 1
+  SCALING_POLICY = 'STANDARD'
+  INITIALLY_SUSPENDED = TRUE
+  COMMENT = 'Compute WH for tutorial.';
+GRANT USAGE ON WAREHOUSE tutorial_warehouse TO ROLE test_role;
+
+CREATE SECURITY INTEGRATION IF NOT EXISTS snowservices_ingress_oauth
+  TYPE=oauth
+  OAUTH_CLIENT=snowservices_ingress
+  ENABLED=true;
+
+GRANT BIND SERVICE ENDPOINT ON ACCOUNT TO ROLE test_role;
+
+CREATE COMPUTE POOL tutorial_compute_pool
+  MIN_NODES = 1
+  MAX_NODES = 1
+  INSTANCE_FAMILY = CPU_X64_XS
+  AUTO_RESUME = TRUE
+  INITIALLY_SUSPENDED = FALSE
+  AUTO_SUSPEND_SECS = 900;
+  COMMENT = 'Compute pool for tutorial.';
+GRANT USAGE, MONITOR ON COMPUTE POOL tutorial_compute_pool TO ROLE test_role;
+
+GRANT ROLE test_role TO USER <user_name>
+
+--  Create database-scoped objects:
+USE ROLE test_role;
+USE DATABASE tutorial_db;
+USE WAREHOUSE tutorial_warehouse;
+
+CREATE SCHEMA IF NOT EXISTS data_schema;
+CREATE IMAGE REPOSITORY IF NOT EXISTS tutorial_repository;
+CREATE STAGE IF NOT EXISTS tutorial_stage
+  DIRECTORY = ( ENABLE = true );
+
+-- Verify objects
+SHOW COMPUTE POOLS; --or DESCRIBE COMPUTE POOL tutorial_compute_pool;
+SHOW WAREHOUSES;
+SHOW IMAGE REPOSITORIES; -- Take repository_url
+SHOW STAGES;
