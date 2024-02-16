@@ -17,7 +17,7 @@ docker build --rm --platform linux/amd64 -t <repository_url>/metabase_service_im
 ```
 2. Authenticate Docker with the Snowflake registry: 
 ```sh
-docker build --rm --platform linux/amd64 -t <repository_url>/metabase_service_image:latest .
+docker login rctdbyr-fe41115.registry.snowflakecomputing.com -u <user>
 ```
 3. Push image:
 ```sh
